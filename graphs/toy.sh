@@ -1,7 +1,7 @@
 #! /bin/bash
 CORPUS="../corpus/toy.clean"
 out_dir="toy"
-
+mkdir -p $out_dir
 echo "generate the edges"
 python corpus2graph.py --sub 1e-5 $CORPUS > $out_dir/graphs.edgelist
 
@@ -27,6 +27,7 @@ rpr_simi
 path_embedding=$out_dir/embeddings.file
 echo "map $path_simi to $path_embedding"
 python idSimi2NodeSimi.py $path_simi $out_dir/node_id.f $path_embedding
-
 echo "compile $path_embedding into the format of numpy"
 python ../hyperwords/text2numpy.py $path_embedding
+
+python ../hyperwords/ws_eval.py SIMI $path_embedding ../testsets/ws/ws353.txt

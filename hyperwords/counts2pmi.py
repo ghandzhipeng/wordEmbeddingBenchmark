@@ -22,7 +22,7 @@ def main():
 
     pmi = calc_pmi(counts, cds)
 
-    save_matrix(vectors_path, pmi)
+    save_matrix(vectors_path, pmi) # pmi is a CSR matrix.
     save_vocabulary(vectors_path + '.words.vocab', iw)
     save_vocabulary(vectors_path + '.contexts.vocab', ic)
 
@@ -35,13 +35,21 @@ def read_counts_matrix(counts_path):
     contexts = load_count_vocabulary(counts_path + '.contexts.vocab')
     words = list(words.keys())
     contexts = list(contexts.keys())
-    iw = sorted(words)
+    iw = sorted(words) # words without counts, also the order is different from that in counts.words.vocab
     ic = sorted(contexts)
-    wi = dict([(w, i) for i, w in enumerate(iw)])
+    wi = dict([(w, i) for i, w in enumerate(iw)]) # wi is a dict {word: id}
     ci = dict([(c, i) for i, c in enumerate(ic)])
     
     counts = csr_matrix((len(wi), len(ci)), dtype=np.float32)
+
+    # csr matrix is composed of three arrays,
+    # row = np.array([0, 0, 1, 2, 2, 2])
+    # col = np.array([0, 2, 2, 0, 1, 2])
+    # data = np.array([1, 2, 3, 4, 5, 6])
+    # mtx = sparse.csr_matrix((data, (row, col)), shape=(3, 3)).
+
     tmp_counts = dok_matrix((len(wi), len(ci)), dtype=np.float32)
+    # dictionary of keys based sparse matrix.
     update_threshold = 100000
     i = 0
     with open(counts_path) as f:

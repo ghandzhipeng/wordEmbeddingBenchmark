@@ -76,7 +76,7 @@ class SVDEmbedding(Embedding):
             self.normalize()
 
 
-class EnsembleEmbedding(Embedding):
+class EnsembleEmbedding(Embedding): # use word embedding and context embedding both.
     """
     Adds the vectors of two distinct embeddings (of the same dimensionality) to create a new representation.
     Commonly used by adding the context embeddings to the word embeddings.

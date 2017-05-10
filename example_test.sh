@@ -11,7 +11,7 @@ if [ ! -f news.2010.en.shuffled ]; then
     gzip -d news.2010.en.shuffled.gz
 fi
 
-CORPUS=news.2010.en.shuffled
+CORPUS=corpus/news.2010.en.shuffled
 
 # Clean the corpus from non alpha-numeric symbols
 scripts/clean_corpus.sh $CORPUS > $CORPUS.clean
@@ -26,7 +26,7 @@ scripts/pairs2counts.sh w2.sub/pairs > w2.sub/counts
 python hyperwords/counts2vocab.py w2.sub/counts
 
 # B) Window size 5 with dynamic contexts and "dirty" subsampling
-mkdir w5.dyn.sub.del
+mkdir w5.dyn.sub.del -p
 python hyperwords/corpus2pairs.py --win 5 --dyn --sub 1e-5 --del ${CORPUS}.clean > w5.dyn.sub.del/pairs
 scripts/pairs2counts.sh w5.dyn.sub.del/pairs > w5.dyn.sub.del/counts
 python hyperwords/counts2vocab.py w5.dyn.sub.del/counts

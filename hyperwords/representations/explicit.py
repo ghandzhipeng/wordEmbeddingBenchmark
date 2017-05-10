@@ -9,6 +9,7 @@ from representations.matrix_serializer import load_vocabulary, load_matrix
 class Explicit:
     """
     Base class for explicit representations. Assumes that the serialized input is e^PMI.
+    LOAD matrix from a *.npz file.
     """
     
     def __init__(self, path, normalize=True):

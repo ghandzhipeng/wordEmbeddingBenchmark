@@ -1,7 +1,7 @@
 #! /bin/bash
 CORPUS="../corpus/news.2010.en.shuffled.clean"
 out_dir="win1"
-
+mkdir -p $out_dir
 echo "generate the edges"
 # python corpus2graph.py --sub 1e-5 $CORPUS > $out_dir/graphs.edgelist
 
