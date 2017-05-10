@@ -1,0 +1,65 @@
+# clean
+lower case, .
+# scripts/corpus2pairs.py: 
+    parameters: 
+    - threshold(remove infrequent words), 
+    - win(control the window size), 
+    - pos(whether position of a token is output to the 'pairs' file), 
+    - dyn(whether use dynamic window), 
+    - sub(whether use subsampling), 
+    - d3l(whether delete infrequent words)
+    ## pairs file
+        officer financial
+        discover officer
+        discover financial
+        financial officer
+        financial discover
+# pairs to counts
+    NO PARAMETERS.
+    # counts
+      1 z zeller
+      1 z zero
+      3 z zetas
+      1 z zhou
+      1 z zombie
+
+
+# counts2vocab:
+    sort the vocab by the number of the occurance of a word or a context.
+    # word vocab
+        "part 24
+        [updated 24
+        "coming 22
+        "much 17
+        (logo 3
+    # context vocab
+        "part 24
+        [updated 24
+        "coming 22
+        "much 17
+        (logo 3
+#### ATTENSION: pmi.words.vocab is different from counts.words.vocab. There are no counts in pmi.words.vocab.
+
+# counts2pmi:
+         parameter: cds: context distribution smoothing.(power(0.75?, 1?))
+         'pmi' is a CSR matrix with each element as: #(w, c) * |D| / [#w * #c] (not logged, also not truncated.)
+
+# ppmi
+         parameters: 
+         - neg(negative sampling, used for shift)
+         - w+c, whether use ensemble(not applicable for ppmi)
+         - eig: weighted SVD(only used for SVD)
+
+# tasks
+         - analogy:
+            write	writes	talk	talks
+            write	writes	think	thinks
+            write	writes	vanish	vanishes
+            write	writes	walk	walks
+            write	writes	work	works
+         - word similarity:
+            feathers truck 1.000000
+            festival whiskers 1.000000
+            muscle tulip 1.000000
+            bikini pizza 1.000000
+            bakery zebra 0.000000
