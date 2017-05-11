@@ -46,6 +46,13 @@ class Embedding:
         scores = self.m.dot(self.represent(w))
         return heapq.nlargest(n, zip(scores, self.iw))
     
+class SimiEmbedding(Embedding):
+    """
+    SimiEmbeddings, read embeddings from .npy files
+    """
+    def __init__(self, path, normalize=True):
+        if normalize:
+            self.normalize()
 
 class SVDEmbedding(Embedding):
     """

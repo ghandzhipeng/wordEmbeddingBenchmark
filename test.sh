@@ -1,41 +1,53 @@
 #! /bin/bash
 word_simi(){
-    python hyperwords/ws_eval.py --neg 5 PPMI w2.sub/pmi $1
-    python hyperwords/ws_eval.py --eig 0.5 SVD w2.sub/svd $1
-    python hyperwords/ws_eval.py --w+c SGNS w2.sub/sgns $1
-    
-    python hyperwords/ws_eval.py --neg 5 PPMI w5.dyn.sub.del/pmi $1
-    python hyperwords/ws_eval.py --eig 0.5 SVD w5.dyn.sub.del/svd $1
-    python hyperwords/ws_eval.py --w+c SGNS w5.dyn.sub.del/sgns $1
-
+    python hyperwords/ws_eval.py --neg 5 PPMI $1/pmi $2
+    python hyperwords/ws_eval.py --eig 0.5 SVD $1/svd $2
+    python hyperwords/ws_eval.py --w+c SGNS $1/sgns $2
 }
 word_analogy(){
-    python hyperwords/analogy_eval.py PPMI w2.sub/pmi $1
-    python hyperwords/analogy_eval.py --eig 0 SVD w2.sub/svd $1
-    python hyperwords/analogy_eval.py SGNS w2.sub/sgns $1
-    
-    python hyperwords/analogy_eval.py PPMI w5.dyn.sub.del/pmi $1
-    python hyperwords/analogy_eval.py --eig 0 SVD w5.dyn.sub.del/svd $1
-    python hyperwords/analogy_eval.py SGNS w5.dyn.sub.del/sgns $1
+    python hyperwords/analogy_eval.py PPMI $1/pmi $2 
+    python hyperwords/analogy_eval.py --eig 0 SVD $1/svd $2 
+    python hyperwords/analogy_eval.py SGNS $1/sgns $2 
 }
-input=testsets
+input_test_dir=testsets
 
-# Evaluate on Word Similarity
 ws_array=( "bruni_men.txt" "radinsky_mturk.txt" "ws353_similarity.txt" "luong_rare.txt" "ws353_relatedness.txt" "ws353.txt" )
+ana_array=( "google.txt" "msr.txt" )
+# Evaluate on Word Similarity
+input_dir=w2.sub
 for element in ${ws_array[@]}
 do
     echo "-----------------------------------------------"
-    benchmark=$input/ws/$element
+    benchmark=$input_test_dir/ws/$element
     echo $benchmark
-    word_simi $benchmark
+    word_simi $input_dir $benchmark
 done
 
 # Evaluate on Analogies
-ana_array=( "google.txt" "msr.txt" )
 for element in ${ana_array[@]}
 do
     echo "-----------------------------------------------"
-    benchmark=$input/analogy/$element
+    benchmark=$input_test_dir/analogy/$element
     echo $benchmark
-    word_analogy $benchmark
+    word_analogy $input_dir $benchmark
 done
+
+# Evaluate on Word Similarity
+input_dir=w5.dyn.sub.del
+for element in ${ws_array[@]}
+do
+    echo "-----------------------------------------------"
+    benchmark=$input_test_dir/ws/$element
+    echo $benchmark
+    word_simi $input_dir $benchmark
+done
+
+# Evaluate on Analogies
+for element in ${ana_array[@]}
+do
+    echo "-----------------------------------------------"
+    benchmark=$input_test_dir/analogy/$element
+    echo $benchmark
+    word_analogy $input_dir $benchmark
+done
+

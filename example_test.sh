@@ -73,14 +73,14 @@ python hyperwords/ws_eval.py --eig 0.5 SVD w5.dyn.sub.del/svd testsets/ws/ws353.
 python hyperwords/ws_eval.py --w+c SGNS w5.dyn.sub.del/sgns testsets/ws/ws353.txt
 
 
-# Evaluate on Analogies
-echo "Google Analogy Results"
-echo "----------------------"
-
-python hyperwords/analogy_eval.py PPMI w2.sub/pmi testsets/analogy/google.txt
-python hyperwords/analogy_eval.py --eig 0 SVD w2.sub/svd testsets/analogy/google.txt
-python hyperwords/analogy_eval.py SGNS w2.sub/sgns testsets/analogy/google.txt
-
-python hyperwords/analogy_eval.py PPMI w5.dyn.sub.del/pmi testsets/analogy/google.txt
-python hyperwords/analogy_eval.py --eig 0 SVD w5.dyn.sub.del/svd testsets/analogy/google.txt
-python hyperwords/analogy_eval.py SGNS w5.dyn.sub.del/sgns testsets/analogy/google.txt
+## Evaluate on Analogies
+#echo "Google Analogy Results"
+#echo "----------------------"
+#
+#python hyperwords/analogy_eval.py PPMI w2.sub/pmi testsets/analogy/google.txt
+#python hyperwords/analogy_eval.py --eig 0 SVD w2.sub/svd testsets/analogy/google.txt
+#python hyperwords/analogy_eval.py SGNS w2.sub/sgns testsets/analogy/google.txt
+#
+#python hyperwords/analogy_eval.py PPMI w5.dyn.sub.del/pmi testsets/analogy/google.txt
+#python hyperwords/analogy_eval.py --eig 0 SVD w5.dyn.sub.del/svd testsets/analogy/google.txt
+#python hyperwords/analogy_eval.py SGNS w5.dyn.sub.del/sgns testsets/analogy/google.txt

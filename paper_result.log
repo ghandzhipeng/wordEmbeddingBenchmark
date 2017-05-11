@@ -1,0 +1,80 @@
+-----------------------------------------------
+testsets/ws/bruni_men.txt
+PPMI w2.sub/pmi 	0.595
+SVD w2.sub/svd 	0.672
+SGNS w2.sub/sgns 	0.333
+-----------------------------------------------
+testsets/ws/radinsky_mturk.txt
+PPMI w2.sub/pmi 	0.578
+SVD w2.sub/svd 	0.541
+SGNS w2.sub/sgns 	0.511
+-----------------------------------------------
+testsets/ws/ws353_similarity.txt
+PPMI w2.sub/pmi 	0.642
+SVD w2.sub/svd 	0.688
+SGNS w2.sub/sgns 	0.391
+-----------------------------------------------
+testsets/ws/luong_rare.txt
+PPMI w2.sub/pmi 	0.027
+SVD w2.sub/svd 	0.121
+SGNS w2.sub/sgns 	0.103
+-----------------------------------------------
+testsets/ws/ws353_relatedness.txt
+PPMI w2.sub/pmi 	0.513
+SVD w2.sub/svd 	0.503
+SGNS w2.sub/sgns 	0.234
+-----------------------------------------------
+testsets/ws/ws353.txt
+PPMI w2.sub/pmi 	0.567
+SVD w2.sub/svd 	0.585
+SGNS w2.sub/sgns 	0.305
+-----------------------------------------------
+testsets/analogy/google.txt
+PPMI w2.sub/pmi 	0.292 	0.335
+SVD w2.sub/svd 	0.291 	0.329
+SGNS w2.sub/sgns 	0.068 	0.067
+-----------------------------------------------
+testsets/analogy/msr.txt
+PPMI w2.sub/pmi 	0.296 	0.379
+SVD w2.sub/svd 	0.264 	0.294
+SGNS w2.sub/sgns 	0.089 	0.083
+-----------------------------------------------
+testsets/ws/bruni_men.txt
+PPMI w5.dyn.sub.del/pmi 	0.612
+SVD w5.dyn.sub.del/svd 	0.673
+SGNS w5.dyn.sub.del/sgns 	0.529
+-----------------------------------------------
+testsets/ws/radinsky_mturk.txt
+PPMI w5.dyn.sub.del/pmi 	0.593
+SVD w5.dyn.sub.del/svd 	0.611
+SGNS w5.dyn.sub.del/sgns 	0.612
+-----------------------------------------------
+testsets/ws/ws353_similarity.txt
+PPMI w5.dyn.sub.del/pmi 	0.603
+SVD w5.dyn.sub.del/svd 	0.654
+SGNS w5.dyn.sub.del/sgns 	0.575
+-----------------------------------------------
+testsets/ws/luong_rare.txt
+PPMI w5.dyn.sub.del/pmi 	0.024
+SVD w5.dyn.sub.del/svd 	0.090
+SGNS w5.dyn.sub.del/sgns 	0.144
+-----------------------------------------------
+testsets/ws/ws353_relatedness.txt
+PPMI w5.dyn.sub.del/pmi 	0.587
+SVD w5.dyn.sub.del/svd 	0.566
+SGNS w5.dyn.sub.del/sgns 	0.515
+-----------------------------------------------
+testsets/ws/ws353.txt
+PPMI w5.dyn.sub.del/pmi 	0.603
+SVD w5.dyn.sub.del/svd 	0.603
+SGNS w5.dyn.sub.del/sgns 	0.566
+-----------------------------------------------
+testsets/analogy/google.txt
+PPMI w5.dyn.sub.del/pmi 	0.280 	0.316
+SVD w5.dyn.sub.del/svd 	0.271 	0.299
+SGNS w5.dyn.sub.del/sgns 	0.206 	0.201
+-----------------------------------------------
+testsets/analogy/msr.txt
+PPMI w5.dyn.sub.del/pmi 	0.196 	0.223
+SVD w5.dyn.sub.del/svd 	0.148 	0.148
+SGNS w5.dyn.sub.del/sgns 	0.164 	0.157

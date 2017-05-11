@@ -1,4 +1,4 @@
-from embedding import SVDEmbedding, EnsembleEmbedding, Embedding
+from embedding import SVDEmbedding, EnsembleEmbedding, Embedding, SimiEmbedding
 from explicit import PositiveExplicit
 
 
@@ -31,4 +31,4 @@ def create_representation(args):
             raise Exception('w+c is not implemented for SIMI.')
         else:
             # loadd embedding from *.npy matrix
-            return Embedding(path, True)
+            return SimiEmbedding(path, True)
