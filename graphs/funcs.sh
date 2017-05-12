@@ -30,6 +30,9 @@ rpr_simi_out_dir=$output_dir/rpr_simi.arrays
 rpr_simi(){
     java -cp EmbeddingFrameWork.jar:jcommander-1.60.jar:ejml-0.25.jar Compute.CRootedPageRank --path_train_data $path_train_data --path_simi $path_simi --node_num $node_num --thread_num $thread_num $1
 }
+pmi_simi(){
+    java -cp EmbeddingFrameWork.jar:jcommander-1.60.jar:ejml-0.25.jar Compute.CPMI --path_train_data $path_train_data --path_simi $path_simi --node_num $node_num --cds $cds --thread_num $thread_num $1
+}
 # Judge Tools
 embedding_link_pred(){
     java -cp EmbeddingFrameWork.jar:jcommander-1.60.jar:ejml-0.25.jar JudgeTools.EmbeddingsLinkPred --path_train_data $path_train_data --path_test_data $path_test_data --path_source_vec $path_source_vec --node_num $node_num --path_dest_vec $path_dest_vec --negative_ratio $neg_ratio $1

@@ -14,7 +14,7 @@ input_test_dir=testsets
 ws_array=( "bruni_men.txt" "radinsky_mturk.txt" "ws353_similarity.txt" "luong_rare.txt" "ws353_relatedness.txt" "ws353.txt" )
 ana_array=( "google.txt" "msr.txt" )
 # Evaluate on Word Similarity
-input_dir=w2.sub
+input_dir=w2.sub.directed
 for element in ${ws_array[@]}
 do
     echo "-----------------------------------------------"
@@ -33,7 +33,7 @@ do
 done
 
 # Evaluate on Word Similarity
-input_dir=w5.dyn.sub.del
+input_dir=w5.dyn.sub.del.directed
 for element in ${ws_array[@]}
 do
     echo "-----------------------------------------------"

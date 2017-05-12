@@ -9,11 +9,11 @@ def main():
     args = docopt("""
     Usage:
         text2npz.py <path>
-        Only used for full rank information. LIKE graph-based measures like PMI-simulation, rootedPageRank.
     """)
     
+    # Only used for full rank information. LIKE graph-based measures like PMI-simulation, rootedPageRank.
     path = args['<path>']
-    
+    print "args read", path   
     matrix = read_vectors(path)
     iw = sorted(matrix.keys())
     
