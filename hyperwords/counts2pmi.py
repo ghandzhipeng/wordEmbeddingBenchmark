@@ -83,6 +83,9 @@ def calc_pmi(counts, cds):
     pmi = multiply_by_rows(pmi, sum_w)
     pmi = multiply_by_columns(pmi, sum_c)
     pmi = pmi * sum_total
+    # if cds==1, sum_total is the total number of tokens in a corpus, maybe millions or billions.
+    # rather than 30k words in vocabs.
+
     return pmi
 
 

@@ -2,7 +2,7 @@ import heapq
 
 import numpy as np
 
-from representations.matrix_serializer import load_vocabulary
+from matrix_serializer import load_vocabulary
 
 
 class Embedding:
@@ -45,14 +45,6 @@ class Embedding:
         """
         scores = self.m.dot(self.represent(w))
         return heapq.nlargest(n, zip(scores, self.iw))
-    
-class SimiEmbedding(Embedding):
-    """
-    SimiEmbeddings, read embeddings from .npy files
-    """
-    def __init__(self, path, normalize=True):
-        if normalize:
-            self.normalize()
 
 class SVDEmbedding(Embedding):
     """
