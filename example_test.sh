@@ -14,50 +14,50 @@ if [ ! -f $CORPUS ]; then
 fi
 
 # A) Window size 2 with "clean" subsampling
-output_dir=w2.sub.directed
-mkdir $output_dir -p
-python hyperwords/corpus2pairs.py --win 2 --sub 1e-5 ${CORPUS}.clean > $output_dir/pairs
-scripts/pairs2counts.sh $output_dir/pairs > $output_dir/counts
-python hyperwords/counts2vocab.py $output_dir/counts
+output_dir=w2.sub
+#mkdir $output_dir -p
+#python hyperwords/corpus2pairs.py --win 2 --sub 1e-5 ${CORPUS}.clean > $output_dir/pairs
+#scripts/pairs2counts.sh $output_dir/pairs > $output_dir/counts
+#python hyperwords/counts2vocab.py $output_dir/counts
 # Calculate PMI matrices for each collection of pairs
 python hyperwords/counts2pmi.py --cds 0.75 $output_dir/counts $output_dir/pmi
 # Create embeddings with SVD
-python hyperwords/pmi2svd.py --dim 500 --neg 5 $output_dir/pmi $output_dir/svd
-cp $output_dir/pmi.words.vocab $output_dir/svd.words.vocab
-cp $output_dir/pmi.contexts.vocab $output_dir/svd.contexts.vocab
+#python hyperwords/pmi2svd.py --dim 500 --neg 5 $output_dir/pmi $output_dir/svd
+#cp $output_dir/pmi.words.vocab $output_dir/svd.words.vocab
+#cp $output_dir/pmi.contexts.vocab $output_dir/svd.contexts.vocab
 # Create embeddings with SGNS (A). 
-word2vecf/word2vecf -train $output_dir/pairs -pow 0.75 -cvocab $output_dir/counts.contexts.vocab -wvocab $output_dir/counts.words.vocab -dumpcv $output_dir/sgns.contexts -output $output_dir/sgns.words -threads 16 -negative 15 -size 500;
-python hyperwords/text2numpy.py $output_dir/sgns.words
-rm $output_dir/sgns.words
-python hyperwords/text2numpy.py $output_dir/sgns.contexts
-rm $output_dir/sgns.contexts
+#word2vecf/word2vecf -train $output_dir/pairs -pow 0.75 -cvocab $output_dir/counts.contexts.vocab -wvocab $output_dir/counts.words.vocab -dumpcv $output_dir/sgns.contexts -output $output_dir/sgns.words -threads 16 -negative 15 -size 500;
+#python hyperwords/text2numpy.py $output_dir/sgns.words
+#rm $output_dir/sgns.words
+#python hyperwords/text2numpy.py $output_dir/sgns.contexts
+#rm $output_dir/sgns.contexts
 
 # B) Window size 5 with dynamic contexts and "dirty" subsampling
 
-output_dir=w5.dyn.sub.del.directed
+output_dir=w5.dyn.sub.del
 mkdir $output_dir -p
-python hyperwords/corpus2pairs.py --win 5 --dyn --sub 1e-5 --del ${CORPUS}.clean > $output_dir/pairs
-scripts/pairs2counts.sh $output_dir/pairs > $output_dir/counts
-python hyperwords/counts2vocab.py $output_dir/counts
-# Calculate PMI matrices for each collection of pairs
+#python hyperwords/corpus2pairs.py --win 5 --dyn --sub 1e-5 --del ${CORPUS}.clean > $output_dir/pairs
+#scripts/pairs2counts.sh $output_dir/pairs > $output_dir/counts
+#python hyperwords/counts2vocab.py $output_dir/counts
+## Calculate PMI matrices for each collection of pairs
 python hyperwords/counts2pmi.py --cds 0.75 $output_dir/counts $output_dir/pmi
-# Create embeddings with SVD
-python hyperwords/pmi2svd.py --dim 500 --neg 5 $output_dir/pmi $output_dir/svd
-cp $output_dir/pmi.words.vocab $output_dir/svd.words.vocab
-cp $output_dir/pmi.contexts.vocab $output_dir/svd.contexts.vocab
-# Create embeddings with SGNS (A). 
-word2vecf/word2vecf -train $output_dir/pairs -pow 0.75 -cvocab $output_dir/counts.contexts.vocab -wvocab $output_dir/counts.words.vocab -dumpcv $output_dir/sgns.contexts -output $output_dir/sgns.words -threads 16 -negative 15 -size 500;
-python hyperwords/text2numpy.py $output_dir/sgns.words
-rm $output_dir/sgns.words
-python hyperwords/text2numpy.py $output_dir/sgns.contexts
-rm $output_dir/sgns.contexts
+## Create embeddings with SVD
+#python hyperwords/pmi2svd.py --dim 500 --neg 5 $output_dir/pmi $output_dir/svd
+#cp $output_dir/pmi.words.vocab $output_dir/svd.words.vocab
+#cp $output_dir/pmi.contexts.vocab $output_dir/svd.contexts.vocab
+## Create embeddings with SGNS (A). 
+#word2vecf/word2vecf -train $output_dir/pairs -pow 0.75 -cvocab $output_dir/counts.contexts.vocab -wvocab $output_dir/counts.words.vocab -dumpcv $output_dir/sgns.contexts -output $output_dir/sgns.words -threads 16 -negative 15 -size 500;
+#python hyperwords/text2numpy.py $output_dir/sgns.words
+#rm $output_dir/sgns.words
+#python hyperwords/text2numpy.py $output_dir/sgns.contexts
+#rm $output_dir/sgns.contexts
 
 
 ## Evaluate on Word Similarity
 #echo "WS353 Results"
 #echo "-------------"
 #
-#python hyperwords/ws_eval.py --neg 5 PPMI w2.sub/pmi testsets/ws/ws353.txt
+#python hyperwords/ws_eval.py --neg 10000 PPMI w2.sub/pmi testsets/ws/ws353.txt
 #python hyperwords/ws_eval.py --eig 0.5 SVD w2.sub/svd testsets/ws/ws353.txt
 #python hyperwords/ws_eval.py --w+c SGNS w2.sub/sgns testsets/ws/ws353.txt
 #
@@ -70,7 +70,7 @@ rm $output_dir/sgns.contexts
 #echo "Google Analogy Results"
 #echo "----------------------"
 #
-#python hyperwords/analogy_eval.py PPMI w2.sub/pmi testsets/analogy/google.txt
+#python hyperwords/analogy_eval.py --neg 10000 PPMI w2.sub/pmi testsets/analogy/google.txt
 #python hyperwords/analogy_eval.py --eig 0 SVD w2.sub/svd testsets/analogy/google.txt
 #python hyperwords/analogy_eval.py SGNS w2.sub/sgns testsets/analogy/google.txt
 #

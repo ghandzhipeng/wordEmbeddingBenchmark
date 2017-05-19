@@ -8,12 +8,13 @@ def create_representation(args):
     neg = int(args['--neg'])
     w_c = args['--w+c']
     eig = float(args['--eig'])
-    
+    normalize = args['--norm']
+
     if rep_type == 'PPMI': # load matrix from an *.npz file.
         if w_c:
             raise Exception('w+c is not implemented for PPMI.')
         else:
-            return PositiveExplicit(path, True, neg)
+            return PositiveExplicit(path, normalize, neg)
         
     elif rep_type == 'SVD': # load npy file. words.vocab, context.covab needed with respect to the embedding matrix.
         if w_c:

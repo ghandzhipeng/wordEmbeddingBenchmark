@@ -12,7 +12,8 @@ def main():
     Options:
         --neg NUM    Number of negative samples; subtracts its log from PMI (only applicable to PPMI) [default: 1]
         --w+c        Use ensemble of word and context vectors (not applicable to PPMI)
-        --eig NUM    Weighted exponent of the eigenvalue matrix (only applicable to SVD) [default: 0.5]
+        --eig NUM    Weighted Component of word and context vectors [default: 0.5]
+        --norm       whether normalize 
     """)
     
     data = read_test_set(args['<task_path>'])
@@ -33,7 +34,9 @@ def read_test_set(path):
 def evaluate(representation, data):
     results = []
     for (x, y), sim in data:
-        results.append((representation.similarity(x, y), sim))
+        computed_sim = representation.similarity(x, y)
+        print computed_sim, sim
+        results.append((computed_sim, sim))
     actual, expected = zip(*results)
     return spearmanr(actual, expected)[0]
 

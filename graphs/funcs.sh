@@ -28,10 +28,13 @@ wrpr_sampling_dest_vec=$output_dir/wrpr_dest.vec
 rpr_simi_out_dir=$output_dir/rpr_simi.arrays
 # compute n*n matrix
 rpr_simi(){
-    java -cp EmbeddingFrameWork.jar:jcommander-1.60.jar:ejml-0.25.jar Compute.CRootedPageRank --path_train_data $path_train_data --path_simi $path_simi --node_num $node_num --thread_num $thread_num $1
+    java -cp EmbeddingFrameWork.jar:jcommander-1.60.jar:ejml-0.25.jar Compute.CRootedPageRank --path_train_data $path_train_data --path_simi $path_simi --node_num $node_num --thread_num $thread_num --restart_rate $restart_rate --max_step $max_step $1
 }
 pmi_simi(){
     java -cp EmbeddingFrameWork.jar:jcommander-1.60.jar:ejml-0.25.jar Compute.CPMI --path_train_data $path_train_data --path_simi $path_simi --node_num $node_num --cds $cds --thread_num $thread_num $1
+}
+bayes_simi(){
+    java -cp EmbeddingFrameWork.jar:jcommander-1.60.jar:ejml-0.25.jar Compute.CBayes --path_train_data $path_train_data --path_simi $path_simi --node_num $node_num --thread_num $thread_num --restart_rate $restart_rate --max_step $max_step $1
 }
 # Judge Tools
 embedding_link_pred(){

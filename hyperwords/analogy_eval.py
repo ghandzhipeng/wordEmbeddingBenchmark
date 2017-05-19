@@ -45,19 +45,30 @@ def evaluate(representation, data, xi, ix):
     sims = prepare_similarities(representation, ix)
     correct_add = 0.0
     correct_mul = 0.0
+    correct_pmi = 0.0 # compute the most similar pmi(a, a_), pmi(b, b_)
     for a, a_, b, b_ in data:
         b_add, b_mul = guess(representation, sims, xi, a, a_, b)
+        #b_pmi = pmi_guess(representation, xi, a, a_, b)
+        #if b_pmi == b_:
+        #    correct_pmi += 1
         if b_add == b_:
             correct_add += 1
         if b_mul == b_:
             correct_mul += 1
-    return correct_add/len(data), correct_mul/len(data)
+    return correct_add/len(data), correct_mul/len(data)#, correct_pmi/len(data)
+
+
+#def pmi_guess(representation, xi, a, a_, b):
+#    # find b_ satisfy that pmi(a, a_) == pmi(b, b_)
+#    if a in representation.wi:
+#        if a_ in representation.wi:
+#            if b in representation.wi:
+#                tmp = representation.m[representation.wi[a]][representation.wi[a_]]
+                
 
 
 def prepare_similarities(representation, vocab):
     vocab_representation = representation.m[[representation.wi[w] if w in representation.wi else 0 for w in vocab]]
-    # why m[0] is used for not appeared words?
-    # ANS: later it will be replaced by dummy.
 
     sims = vocab_representation.dot(representation.m.T) # ?? why?
     # Assuming there are 100 words in testset, 1000 words in corpus, then sims is a 100 * 1000 matrix, with each element being the similarity. However, why element zero is used as the default one is doubtful.
@@ -74,14 +85,14 @@ def prepare_similarities(representation, vocab):
     if type(sims) is not np.ndarray:
         sims = np.array(sims.todense())
     else:
-        sims = (sims+1)/2 # why?
+        sims = (sims+1)/2 # used for cosine, normalize to (0, 1).
     return sims
 
 
 def guess(representation, sims, xi, a, a_, b):
-    sa = sims[xi[a]]
-    sa_ = sims[xi[a_]]
-    sb = sims[xi[b]]
+    sa = sims[xi[a]] # cos(a, b*)
+    sa_ = sims[xi[a_]] # cos(a*, b*)
+    sb = sims[xi[b]] # cos(b, b*)
     
     add_sim = -sa+sa_+sb
     if a in representation.wi:

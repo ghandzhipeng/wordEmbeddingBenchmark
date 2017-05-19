@@ -52,8 +52,8 @@ def main():
                         dynamic_window = rnd.randint(1, win)
                     else:
                         dynamic_window = win
-                    #start = i - dynamic_window
-                    start = i + 1
+                    start = i - dynamic_window
+                    #start = i + 1
                     if start < 0:
                         start = 0
                     end = i + dynamic_window + 1

@@ -22,6 +22,8 @@ class Explicit:
         if normalize:
             self.normalize()
     
+        self.f_debug = open("numerical_value", 'a') 
+    
     def normalize(self):
         m2 = self.m.copy()
         m2.data **= 2
@@ -47,11 +49,24 @@ class Explicit:
     
     def similarity_first_order(self, w, c):
         return self.m[self.wi[w], self.ci[c]]
-    
+
     def similarity(self, w1, w2):
         """
         Assumes the vectors have been normalized.
         """
+        w1_vec = self.represent(w1)
+        w2_vec = self.represent(w2)
+        print w1, w1_vec.getnnz()
+        f_debug = self.f_debug
+        x = w1_vec.toarray()[0]
+        for i in x:
+            f_debug.write(str(i) + " ")
+        f_debug.write("\n")
+        print w2, w2_vec.getnnz()
+        x = w2_vec.toarray()[0]
+        for i in x:
+            f_debug.write(str(i) + " ")
+        f_debug.write("\n")
         return self.represent(w1).dot(self.represent(w2).T)[0, 0]
     
     def closest_contexts(self, w, n=10):
@@ -79,6 +94,7 @@ class PositiveExplicit(Explicit):
         Explicit.__init__(self, path, False)
         self.m.data -= np.log(neg)
         self.m.data[self.m.data < 0] = 0
+        #self.m.data[self.m.data < np.log(neg)] = 0
         # removes zero entries from CSR matrix.
         self.m.eliminate_zeros()
         if normalize:
