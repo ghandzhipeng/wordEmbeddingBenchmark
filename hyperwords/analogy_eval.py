@@ -42,7 +42,8 @@ def get_vocab(data):
 
 
 def evaluate(representation, data, xi, ix):
-    sims = prepare_similarities(representation, ix)
+    # sims = prepare_similarities(representation, ix)
+    sims = prepare_KL(representation, ix, 0)
     correct_add = 0.0
     correct_mul = 0.0
     correct_pmi = 0.0 # compute the most similar pmi(a, a_), pmi(b, b_)
@@ -64,14 +65,54 @@ def evaluate(representation, data, xi, ix):
 #        if a_ in representation.wi:
 #            if b in representation.wi:
 #                tmp = representation.m[representation.wi[a]][representation.wi[a_]]
-                
+
+def kl(a, b, threshold):
+    assert len(a) == len(b)
+    sum = 0
+    for i in xrange(0, len(a)):
+        if a[i] < threshold or b[i] < threshold:
+            continue
+        else:
+            sum += a[i] * np.log(a[i] / b[i])
+
+    return sum
+
+def prepare_KL(representation, vocab, threshold):
+    # precompute the similaritys with others.
+    vocab_representation = representation.m[[representation.wi[w] if w in representation.wi else 0 for w in vocab]]
+
+    # sims = vocab_representation.dot(representation.m.T). Using threshold-based KL divergence instead.
+    sims = np.zeros( (len(vocab_representation), len(representation.m)))
+    for i in xrange(len(vocab_representation)):
+        for j in xrange(len(representation.m)):
+            sims[i][j] = vocab_representation[i, :].dot(representation[:, j])
+
+    # Assuming there are 100 words in the test sets, 1000 words in the whole vocabulary, sims is an 100 * 1000 matrix.
+    # if the word in testsets are not in corpus, the similarity of that word with others are defined to be zero.
+    dummy = None
+    for w in vocab:
+        if w not in representation.wi:
+            dummy = representation.represent(w)
+            break
+    if dummy is not None:
+        for i, w in enumerate(vocab):
+            if w not in representation.wi:
+                vocab_representation[i] = dummy
+
+    if type(sims) is not np.ndarray:
+        sims = np.array(sims.todense())
+    else:
+        sims = (sims + 1) / 2  # used for cosine, normalize to (0, 1).
+    return sims
 
 
 def prepare_similarities(representation, vocab):
+    # precompute the similaritys with others.
     vocab_representation = representation.m[[representation.wi[w] if w in representation.wi else 0 for w in vocab]]
 
-    sims = vocab_representation.dot(representation.m.T) # ?? why?
-    # Assuming there are 100 words in testset, 1000 words in corpus, then sims is a 100 * 1000 matrix, with each element being the similarity. However, why element zero is used as the default one is doubtful.
+    sims = vocab_representation.dot(representation.m.T)
+    # Assuming there are 100 words in the test sets, 1000 words in the whole vocabulary, sims is an 100 * 1000 matrix.
+    # if the word in testsets are not in corpus, the similarity of that word with others are defined to be zero.
     dummy = None
     for w in vocab:
         if w not in representation.wi:
@@ -85,7 +126,7 @@ def prepare_similarities(representation, vocab):
     if type(sims) is not np.ndarray:
         sims = np.array(sims.todense())
     else:
-        sims = (sims+1)/2 # used for cosine, normalize to (0, 1).
+        sims = (sims+1)/2  # used for cosine, normalize to (0, 1).
     return sims
 
 

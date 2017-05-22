@@ -35,7 +35,7 @@ def read_counts_matrix(counts_path):
     contexts = load_count_vocabulary(counts_path + '.contexts.vocab')
     words = list(words.keys())
     contexts = list(contexts.keys())
-    iw = sorted(words) # words without counts, also the order is different from that in counts.words.vocab
+    iw = sorted(words)  # words without counts, also the order is different from that in counts.words.vocab
     ic = sorted(contexts)
     wi = dict([(w, i) for i, w in enumerate(iw)]) # wi is a dict {word: id}
     ci = dict([(c, i) for i, c in enumerate(ic)])
@@ -71,10 +71,21 @@ def calc_pmi(counts, cds):
     """
     Calculates e^PMI; PMI without the log().
     """
-    sum_w = np.array(counts.sum(axis=1))[:, 0]
-    sum_c = np.array(counts.sum(axis=0))[0, :]
-    if cds != 1:
+    sum_w = np.array(counts.sum(axis=1))[:, 0]  # sum by row
+    sum_c = np.array(counts.sum(axis=0))[0, :]  # sum by column
+    if cds == 1:
+        print "cds = 1, pure marginal distribution, p(c|w) / p(c) = exp(PMI)"
+        # this is pure marginal distribution information. Also known as exp(PMI)
+        pass
+    elif cds == 0:
+        print "cds = 0, pure conditional distribution, p(c|w) * |V|"
+        # this is pur conditional information.
+        sum_c = np.ones((1, len(sum_c)))
+    else:
+        # smoothing
+        print "smoothing using cds {}".format(cds)
         sum_c = sum_c ** cds
+
     sum_total = sum_c.sum()
     sum_w = np.reciprocal(sum_w)
     sum_c = np.reciprocal(sum_c)
