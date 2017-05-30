@@ -19,7 +19,8 @@ def main():
     data = read_test_set(args['<task_path>'])
     representation = create_representation(args)
     correlation = evaluate(representation, data)
-    print args['<representation>'], args['<representation_path>'], '\t%0.3f' % correlation
+    print "representation\tpmi_file\tneg_num\tnorm\ttask_path\taccuracy"
+    print args['<representation>'], args['<representation_path>'], args['--neg'], args['--norm'], args['<task_path>'], '\t%0.3f' % correlation
 
 
 def read_test_set(path):
@@ -32,12 +33,18 @@ def read_test_set(path):
 
 
 def evaluate(representation, data):
+    not_in = 0
+    total = 0
     results = []
     for (x, y), sim in data:
         computed_sim = representation.similarity(x, y)
-        print computed_sim, sim
+        # print computed_sim, sim
+        if computed_sim == 0:
+            not_in += 1
+        total += 1
         results.append((computed_sim, sim))
     actual, expected = zip(*results)
+    print "total_question:", total, "total number of zeros:", not_in
     return spearmanr(actual, expected)[0]
 
 

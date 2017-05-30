@@ -15,13 +15,17 @@ def main():
         --neg NUM    Number of negative samples; subtracts its log from PMI (only applicable to PPMI) [default: 1]
         --w+c        Use ensemble of word and context vectors (not applicable to PPMI)
         --eig NUM    Weighted exponent of the eigenvalue matrix (only applicable to SVD) [default: 0.5]
+        --norm       whether normalize 
     """)
     
     data = read_test_set(args['<task_path>'])
     xi, ix = get_vocab(data) # xi is a dict, {word:id}, ix is a set, {word}.
     representation = create_representation(args)
-    accuracy_add, accuracy_mul = evaluate(representation, data, xi, ix)
-    print args['<representation>'], args['<representation_path>'], '\t%0.3f' % accuracy_add, '\t%0.3f' % accuracy_mul
+    accuracy_add, accuracy_mul, accuracy_kl = evaluate(representation, data, xi, ix)
+    print args['<representation>'], args['<representation_path>'], 
+    '\t%0.3f' % accuracy_add, '\t%0.3f' % accuracy_mul, '\t%0.3f' % accuracy_kl
+    print "representation\tpmi_file\tneg_num\tnorm\ttask_path\taccur_add\taccur_mult\taccur_kl\t"
+    print args['<representation>'], args['<representation_path>'], args['--neg'], args['--norm'], args['<task_path>'], '\t%0.3f' % accuracy_add, '\t%0.3f' % accuracy_mul, '\t%0.3f' % accuracy_kl
 
 
 def read_test_set(path):
@@ -42,21 +46,23 @@ def get_vocab(data):
 
 
 def evaluate(representation, data, xi, ix):
-    # sims = prepare_similarities(representation, ix)
-    sims = prepare_KL(representation, ix, 0)
+    sims = prepare_similarities(representation, ix)
+    #sims = prepare_KL(representation, ix, 1e-2) 
+    # KL is too slow because matrix multiplication in python is optimized.
+
     correct_add = 0.0
     correct_mul = 0.0
-    correct_pmi = 0.0 # compute the most similar pmi(a, a_), pmi(b, b_)
+    correct_kl = 0.0 # compute the most similar pmi(a, a_), pmi(b, b_)
     for a, a_, b, b_ in data:
         b_add, b_mul = guess(representation, sims, xi, a, a_, b)
-        #b_pmi = pmi_guess(representation, xi, a, a_, b)
-        #if b_pmi == b_:
-        #    correct_pmi += 1
+        #b_kl = guess_kl(representation, sims, xi, a, a_, b)
+        #if b_kl == b_:
+        #    correct_kl += 1
         if b_add == b_:
             correct_add += 1
         if b_mul == b_:
             correct_mul += 1
-    return correct_add/len(data), correct_mul/len(data)#, correct_pmi/len(data)
+    return correct_add/len(data), correct_mul/len(data), correct_kl/len(data)
 
 
 #def pmi_guess(representation, xi, a, a_, b):
@@ -82,10 +88,15 @@ def prepare_KL(representation, vocab, threshold):
     vocab_representation = representation.m[[representation.wi[w] if w in representation.wi else 0 for w in vocab]]
 
     # sims = vocab_representation.dot(representation.m.T). Using threshold-based KL divergence instead.
-    sims = np.zeros( (len(vocab_representation), len(representation.m)))
-    for i in xrange(len(vocab_representation)):
-        for j in xrange(len(representation.m)):
-            sims[i][j] = vocab_representation[i, :].dot(representation[:, j])
+    vocab_size = vocab_representation.shape[0]
+    repre_size = representation.m.shape[0]
+    sims = np.zeros( (vocab_size, repre_size) )
+    for i in xrange(vocab_size):
+        for j in xrange(repre_size):
+            # need to replace with kl. But maybe too slow.
+            tmp = vocab_representation[i, :].dot(representation.m[:, j])
+            #print type(tmp)
+            sims[i][j] = tmp[0, 0]
 
     # Assuming there are 100 words in the test sets, 1000 words in the whole vocabulary, sims is an 100 * 1000 matrix.
     # if the word in testsets are not in corpus, the similarity of that word with others are defined to be zero.
@@ -128,6 +139,13 @@ def prepare_similarities(representation, vocab):
     else:
         sims = (sims+1)/2  # used for cosine, normalize to (0, 1).
     return sims
+
+
+def guess_kl(representation, sims, xi, a, a_, b):
+    # min |kl(a, a_) - kl(b, b_)|
+    kl_a_a_ = sims[xi[a]][xi[a_]] # kl(a, a_)
+    tmp = sims[xi[b]] - kl_a_a_
+    return abs(tmp).argmin()
 
 
 def guess(representation, sims, xi, a, a_, b):

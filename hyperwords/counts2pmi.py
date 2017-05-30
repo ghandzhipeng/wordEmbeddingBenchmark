@@ -76,15 +76,14 @@ def calc_pmi(counts, cds):
     if cds == 1:
         print "cds = 1, pure marginal distribution, p(c|w) / p(c) = exp(PMI)"
         # this is pure marginal distribution information. Also known as exp(PMI)
-        pass
     elif cds == 0:
         print "cds = 0, pure conditional distribution, p(c|w) * |V|"
         # this is pur conditional information.
-        sum_c = np.ones((1, len(sum_c)))
     else:
         # smoothing
         print "smoothing using cds {}".format(cds)
-        sum_c = sum_c ** cds
+    
+    sum_c = sum_c ** cds
 
     sum_total = sum_c.sum()
     sum_w = np.reciprocal(sum_w)
